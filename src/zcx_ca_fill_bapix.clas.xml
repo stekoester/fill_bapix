@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCX_CA_FILL_BAPIX</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Exceptions for ZCL_CA_FILL_BAPIX</DESCRIPT>
+    <CATEGORY>40</CATEGORY>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Constructor</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>DEEP_STRUCTURE_NOT_ALLOWED</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Deep structure not allowed for parameter.</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PARAMETER_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Subcomponent name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PARAMETER_WRONG_TYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Parameter has the wrong (only structure and table allowed).</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>ZCX_CA_FILL_BAPIX</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>General error.</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <SCONAME>PARAMETER_NAME</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Subcomponent name</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <SCONAME>PREVIOUS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Exception Mapped to the Current Exception</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CONSTRUCTOR</CMPNAME>
+     <SCONAME>TEXTID</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Key for Access to Message Text</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

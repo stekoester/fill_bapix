@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Messages for ZCX_CA_FILL_BAPIX</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
+     <MSGNR>000</MSGNR>
+     <TEXT>General error.</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Parameter &amp;1 has the wrong type (only structure and table allowed).</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Deep structure not allowed for parameter &amp;1.</TEXT>
+    </T100>
+   </T100>
+   <I18N_LANGS>
+    <LANGU>D</LANGU>
+   </I18N_LANGS>
+   <T100T>
+    <T100T>
+     <SPRSL>D</SPRSL>
+     <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
+     <STEXT>Nachrichten für ZCX_CA_FILL_BAPIX</STEXT>
+    </T100T>
+   </T100T>
+   <T100_TEXTS>
+    <item>
+     <SPRSL>D</SPRSL>
+     <MSGNR>000</MSGNR>
+     <TEXT>Allgemeiner Fehler.</TEXT>
+    </item>
+    <item>
+     <SPRSL>D</SPRSL>
+     <MSGNR>001</MSGNR>
+     <TEXT>Parameter &amp;1 hat den falschen Typ (Nur Strukturen und Tabellen erlaubt).</TEXT>
+    </item>
+    <item>
+     <SPRSL>D</SPRSL>
+     <MSGNR>002</MSGNR>
+     <TEXT>Tiefe Strukturen nicht erlaubt für Parameter &amp;1.</TEXT>
+    </item>
+   </T100_TEXTS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
