@@ -106,8 +106,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA client TYPE mandt.
     DATA clientx TYPE mandt.
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                                                   parameter_name = 'BAPI_DATA' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>parameter_wrong_type
+            parameter_name = 'BAPI_DATA'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -132,8 +134,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapimereqheader TYPE bapimereqheader.
     DATA clientx TYPE mandt.
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                                                   parameter_name = 'BAPI_DATAX' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>parameter_wrong_type
+            parameter_name = 'BAPI_DATAX'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -167,8 +171,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF datax_structure.
 
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+            parameter_name = 'BAPI_DATA'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -202,8 +208,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF datax_deep_structure.
 
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+            parameter_name = 'BAPI_DATA'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -238,8 +246,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_datax TYPE ty_datax_structure.
 
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+            parameter_name = 'BAPI_DATA'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -270,8 +280,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_datax TYPE mandt.
 
     TRY.
-        RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+            parameter_name = 'BAPI_DATA'.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
