@@ -7,7 +7,7 @@ CLASS zcl_ca_fill_bapix DEFINITION
     "!
     "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
     "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for ZCL_CA_FILL_BAPIX</p>
+    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS fill_bapix
       IMPORTING
         bapi_data         TYPE data
@@ -21,7 +21,7 @@ CLASS zcl_ca_fill_bapix DEFINITION
     "!
     "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
     "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for ZCL_CA_FILL_BAPIX</p>
+    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_structure
       IMPORTING
         bapi_data  TYPE data
@@ -34,7 +34,7 @@ CLASS zcl_ca_fill_bapix DEFINITION
     "!
     "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
     "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for ZCL_CA_FILL_BAPIX</p>
+    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_table
       IMPORTING
         bapi_data  TYPE data
@@ -57,7 +57,7 @@ CLASS zcl_ca_fill_bapix DEFINITION
     "!
     "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
     "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for ZCL_CA_FILL_BAPIX</p>
+    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_structure_by_comp
       IMPORTING
         bapi_data  TYPE data
@@ -83,12 +83,19 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
       WHEN TYPE cl_abap_tabledescr INTO DATA(bapi_data_tabledescr).
         bapi_data_structdescr = COND #( WHEN bapi_data_tabledescr->get_table_line_type( ) IS INSTANCE OF cl_abap_structdescr
                                         THEN CAST #( bapi_data_tabledescr->get_table_line_type( ) ) ).
-        IF NOT cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr.
-          RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-            EXPORTING
-              textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-              parameter_name = 'BAPI_DATAX'.
-
+        IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS NOT INSTANCE OF cl_abap_tabledescr.
+          IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr.
+            RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+              EXPORTING
+                textid            = zcx_ca_fill_bapix=>different_types
+                parameter_name_01 = 'BAPI_DATA'
+                parameter_name_02 = 'BAPI_DATAX'.
+          ELSE.
+            RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+              EXPORTING
+                textid         = zcx_ca_fill_bapix=>parameter_wrong_type
+                parameter_name = 'BAPI_DATAX'.
+          ENDIF.
         ENDIF.
       WHEN OTHERS.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
@@ -172,7 +179,6 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   METHOD _fill_bapix_structure_by_comp.
     DATA(bapi_data_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_data ) )->get_components( ).
     DATA(bapi_datax_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_datax ) )->get_components( ).
-
     LOOP AT bapi_data_components REFERENCE INTO DATA(bapi_data_component).
       IF bapi_data_component->type IS NOT INSTANCE OF cl_abap_elemdescr.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
