@@ -73,7 +73,7 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   METHOD fill_bapix.
     CASE TYPE OF cl_abap_typedescr=>describe_by_data( bapi_data ).
       WHEN TYPE cl_abap_structdescr INTO DATA(bapi_data_structdescr).
-        IF NOT cl_abap_typedescr=>describe_by_data( bapi_data ) IS INSTANCE OF cl_abap_structdescr.
+        IF NOT cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr.
           RAISE EXCEPTION TYPE zcx_ca_fill_bapix
             EXPORTING
               textid         = zcx_ca_fill_bapix=>parameter_wrong_type
@@ -173,6 +173,14 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
     DATA(bapi_data_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_data ) )->get_components( ).
     DATA(bapi_datax_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_datax ) )->get_components( ).
 
+    LOOP AT bapi_data_components REFERENCE INTO DATA(bapi_data_component).
+      IF bapi_data_component->type IS NOT INSTANCE OF cl_abap_elemdescr.
+        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+          EXPORTING
+            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+            parameter_name = 'BAPI_DATA'.
+      ENDIF.
+    ENDLOOP.
     LOOP AT bapi_datax_components REFERENCE INTO DATA(bapi_datax_component).
       IF bapi_datax_component->type IS NOT INSTANCE OF cl_abap_elemdescr.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
@@ -180,15 +188,12 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
             textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
             parameter_name = 'BAPI_DATAX'.
       ENDIF.
-      DATA(bapi_data_component) = REF #( bapi_data_components[ name = bapi_datax_component->name ] OPTIONAL ).
+    ENDLOOP.
+
+    LOOP AT bapi_datax_components REFERENCE INTO bapi_datax_component.
+      bapi_data_component = REF #( bapi_data_components[ name = bapi_datax_component->name ] OPTIONAL ).
       IF bapi_data_component IS NOT BOUND.
         CONTINUE.
-      ENDIF.
-      IF bapi_data_component->type IS NOT INSTANCE OF cl_abap_elemdescr.
-        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-          EXPORTING
-            textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-            parameter_name = 'BAPI_DATA'.
       ENDIF.
       ASSIGN COMPONENT bapi_data_component->name OF STRUCTURE bapi_data
              TO FIELD-SYMBOL(<bapi_data_value>).
