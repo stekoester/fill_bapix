@@ -44,6 +44,18 @@ CLASS zcx_ca_fill_bapix DEFINITION
         attr4 TYPE scx_attrname VALUE '',
       END OF deep_structure_not_allowed.
 
+    CONSTANTS:
+      "! <p class="shorttext synchronized">Deep structure not allowed for parameter.</p>
+      "!
+      BEGIN OF different_types,
+        msgid TYPE symsgid VALUE 'ZCX_STKOES_FILLBAPIX',
+        msgno TYPE symsgno VALUE '003',
+        attr1 TYPE scx_attrname VALUE 'MV_PARAMETER_01',
+        attr2 TYPE scx_attrname VALUE 'MV_PARAMETER_02',
+        attr3 TYPE scx_attrname VALUE '',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF different_types.
+
     "! <p class="shorttext synchronized">Constructor</p>
     "!
     "! @parameter textid         | <p class="shorttext synchronized">Key for Access to Message Text</p>
@@ -51,14 +63,22 @@ CLASS zcx_ca_fill_bapix DEFINITION
     "! @parameter parameter_name | <p class="shorttext synchronized">Subcomponent name</p>
     METHODS constructor
       IMPORTING
-        textid         LIKE if_t100_message=>t100key DEFAULT zcx_ca_fill_bapix=>zcx_ca_fill_bapix
-        previous       LIKE previous OPTIONAL
-        parameter_name TYPE seosconame OPTIONAL
+        textid            LIKE if_t100_message=>t100key DEFAULT zcx_ca_fill_bapix=>zcx_ca_fill_bapix
+        previous          LIKE previous OPTIONAL
+        parameter_name    TYPE seosconame OPTIONAL
+        parameter_name_01 TYPE seosconame OPTIONAL
+        parameter_name_02 TYPE seosconame OPTIONAL
           PREFERRED PARAMETER textid.
 
     "! <p class="shorttext synchronized">Subcomponent name</p>
     "!
     DATA parameter_name TYPE seosconame.
+    "! <p class="shorttext synchronized">Subcomponent name</p>
+    "!
+    DATA parameter_name_01 TYPE seosconame.
+    "! <p class="shorttext synchronized">Subcomponent name</p>
+    "!
+    DATA parameter_name_02 TYPE seosconame.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -74,6 +94,8 @@ CLASS zcx_ca_fill_bapix IMPLEMENTATION.
     CLEAR me->textid.
 
     me->parameter_name = parameter_name.
+    me->parameter_name_01 = parameter_name_01.
+    me->parameter_name_02 = parameter_name_02.
 
     if_t100_message~t100key = textid.
   ENDMETHOD.

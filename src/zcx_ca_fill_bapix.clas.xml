@@ -24,7 +24,22 @@
      <DESCRIPT>Deep structure not allowed for parameter.</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>DIFFERENT_TYPES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Deep structure not allowed for parameter.</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>PARAMETER_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Subcomponent name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PARAMETER_NAME_01</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Subcomponent name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PARAMETER_NAME_02</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Subcomponent name</DESCRIPT>
     </SEOCOMPOTX>
