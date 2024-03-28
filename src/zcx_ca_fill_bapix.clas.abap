@@ -48,7 +48,7 @@ CLASS zcx_ca_fill_bapix DEFINITION
       "! <p class="shorttext synchronized">Deep structure not allowed for parameter.</p>
       "!
       BEGIN OF different_types,
-        msgid TYPE symsgid VALUE 'ZCX_STKOES_FILLBAPIX',
+        msgid TYPE symsgid VALUE 'ZCX_CA_FILL_BAPIX',
         msgno TYPE symsgno VALUE '003',
         attr1 TYPE scx_attrname VALUE 'MV_PARAMETER_01',
         attr2 TYPE scx_attrname VALUE 'MV_PARAMETER_02',
