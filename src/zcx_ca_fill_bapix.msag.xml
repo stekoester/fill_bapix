@@ -30,7 +30,7 @@
      <SPRSL>E</SPRSL>
      <ARBGB>ZCX_CA_FILL_BAPIX</ARBGB>
      <MSGNR>003</MSGNR>
-     <TEXT>&amp;1 and &amp;2 have different types.</TEXT>
+     <TEXT>Parameter &amp;1 and &amp;2 have different types.</TEXT>
     </T100>
    </T100>
    <I18N_LANGS>
@@ -58,6 +58,11 @@
      <SPRSL>D</SPRSL>
      <MSGNR>002</MSGNR>
      <TEXT>Tiefe Strukturen nicht erlaubt für Parameter &amp;1.</TEXT>
+    </item>
+    <item>
+     <SPRSL>D</SPRSL>
+     <MSGNR>003</MSGNR>
+     <TEXT>Parameter &amp;1 und &amp;2 haben verscheidene Typen.</TEXT>
     </item>
    </T100_TEXTS>
   </asx:values>
