@@ -5,9 +5,9 @@ CLASS zcl_ca_fill_bapix DEFINITION
   PUBLIC SECTION.
     "! <p class="shorttext synchronized">Fill BAPIX data dependent on BAPI data</p>
     "!
-    "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
-    "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
+    "! @parameter bapi_data         | <p class="shorttext synchronized">BAPI data</p>
+    "! @parameter bapi_datax        | <p class="shorttext synchronized">BAPIX data</p>
+    "! @raising   zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS fill_bapix
       IMPORTING
         bapi_data         TYPE data
@@ -19,9 +19,9 @@ CLASS zcl_ca_fill_bapix DEFINITION
   PRIVATE SECTION.
     "! <p class="shorttext synchronized">Fill BAPIX data structure dependent on BAPI data structure</p>
     "!
-    "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
-    "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
+    "! @parameter bapi_data         | <p class="shorttext synchronized">BAPI data</p>
+    "! @parameter bapi_datax        | <p class="shorttext synchronized">BAPIX data</p>
+    "! @raising   zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_structure
       IMPORTING
         bapi_data  TYPE data
@@ -32,9 +32,9 @@ CLASS zcl_ca_fill_bapix DEFINITION
 
     "! <p class="shorttext synchronized">Fill BAPIX data table dependent on BAPI data table</p>
     "!
-    "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
-    "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
+    "! @parameter bapi_data         | <p class="shorttext synchronized">BAPI data</p>
+    "! @parameter bapi_datax        | <p class="shorttext synchronized">BAPIX data</p>
+    "! @raising   zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_table
       IMPORTING
         bapi_data  TYPE data
@@ -45,8 +45,8 @@ CLASS zcl_ca_fill_bapix DEFINITION
 
     "! <p class="shorttext synchronized">Fill BAPIX data dependent on BAPI data using data dictionary</p>
     "!
-    "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
-    "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
+    "! @parameter bapi_data  | <p class="shorttext synchronized">BAPI data</p>
+    "! @parameter bapi_datax | <p class="shorttext synchronized">BAPIX data</p>
     CLASS-METHODS _fill_bapix_structure_by_ddic
       IMPORTING
         bapi_data  TYPE data
@@ -55,9 +55,9 @@ CLASS zcl_ca_fill_bapix DEFINITION
 
     "! <p class="shorttext synchronized">Fill BAPIX data dependent on BAPI data using components</p>
     "!
-    "! @parameter bapi_data       | <p class="shorttext synchronized">BAPI data</p>
-    "! @parameter bapi_datax      | <p class="shorttext synchronized">BAPIX data</p>
-    "! @raising zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
+    "! @parameter bapi_data         | <p class="shorttext synchronized">BAPI data</p>
+    "! @parameter bapi_datax        | <p class="shorttext synchronized">BAPIX data</p>
+    "! @raising   zcx_ca_fill_bapix | <p class="shorttext synchronized">Exceptions for zcx_ca_fill_bapix</p>
     CLASS-METHODS _fill_bapix_structure_by_comp
       IMPORTING
         bapi_data  TYPE data
@@ -68,12 +68,11 @@ CLASS zcl_ca_fill_bapix DEFINITION
 ENDCLASS.
 
 
-
 CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   METHOD fill_bapix.
     CASE TYPE OF cl_abap_typedescr=>describe_by_data( bapi_data ).
       WHEN TYPE cl_abap_structdescr INTO DATA(bapi_data_structdescr).
-        IF NOT cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr.
+        IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS NOT INSTANCE OF cl_abap_structdescr.
           RAISE EXCEPTION TYPE zcx_ca_fill_bapix
             EXPORTING
               textid         = zcx_ca_fill_bapix=>parameter_wrong_type
@@ -136,7 +135,7 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD _fill_bapix_table.
-    FIELD-SYMBOLS <bapi_data> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <bapi_data>  TYPE STANDARD TABLE.
     FIELD-SYMBOLS <bapi_datax> TYPE STANDARD TABLE.
 
     ASSIGN bapi_data TO <bapi_data>.
