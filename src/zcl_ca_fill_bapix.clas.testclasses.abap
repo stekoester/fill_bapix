@@ -18,23 +18,23 @@ ENDCLASS.
 
 CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
   METHOD successful_fill_structure.
-    DATA bapimereqheader TYPE bapimereqheader.
-    DATA bapimereqheaderx TYPE bapimereqheaderx.
-    bapimereqheader = VALUE #( preq_no  = '0000000001'
-                               pr_type  = 'NB'
-                               ctrl_ind = 'T' ).
+    DATA bapi_data TYPE bapimereqheader.
+    DATA bapi_datax TYPE bapimereqheaderx.
+    bapi_data = VALUE #( preq_no  = '0000000001'
+                         pr_type  = 'NB'
+                         ctrl_ind = 'T' ).
     DATA(expected_result) = VALUE bapimereqheaderx( preq_no  = abap_true
                                                     pr_type  = abap_true
                                                     ctrl_ind = abap_true ).
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = bapimereqheader
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = bapimereqheaderx ).
-        cl_abap_unit_assert=>assert_equals( act = bapimereqheaderx
-                                            exp = expected_result
-                                            msg = |Expected result not received|
+            bapi_datax = bapi_datax ).
+        cl_abap_unit_assert=>assert_equals( act                  = bapi_datax
+                                            exp                  = expected_result
+                                            msg                  = |Expected result not received|
                                             ignore_hash_sequence = abap_true ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
     ENDTRY.
@@ -43,12 +43,12 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD successful_fill_table.
-    DATA pritem  TYPE ty_bapimereqitemimp.
-    DATA pritemx TYPE ty_bapimereqitemx.
-    pritem = VALUE #( ( preq_item = '00010'
-                        pur_group = '001'
-                        short_text = 'Material description'
-                        material = 'Material' ) ).
+    DATA bapi_data  TYPE ty_bapimereqitemimp.
+    DATA bapi_datax TYPE ty_bapimereqitemx.
+    bapi_data = VALUE #( ( preq_item = '00010'
+                           pur_group = '001'
+                           short_text = 'Material description'
+                           material = 'Material' ) ).
     DATA(expected_result) = VALUE ty_bapimereqitemx( ( preq_item = '00010'
                                                        pur_group = abap_true
                                                        short_text = abap_true
@@ -56,10 +56,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = pritem
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = pritemx ).
-        cl_abap_unit_assert=>assert_equals( act = pritemx
+            bapi_datax = bapi_datax ).
+        cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
@@ -84,16 +84,16 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_datax.
     TYPES tty_datax TYPE STANDARD TABLE OF ty_datax WITH DEFAULT KEY.
 
-    DATA datax TYPE tty_datax.
-    DATA(data) = VALUE tty_data( ( client = sy-mandt ) ).
+    DATA bapi_datax TYPE tty_datax.
+    DATA(bapi_data) = VALUE tty_data( ( client = sy-mandt ) ).
     DATA(expected_result) = VALUE tty_datax( ( client = abap_true ) ).
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = data
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = datax ).
-        cl_abap_unit_assert=>assert_equals( act = datax
+            bapi_datax = bapi_datax ).
+        cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
@@ -103,125 +103,125 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD fail_wrong_data_type.
-    DATA client TYPE mandt.
-    DATA clientx TYPE mandt.
+    DATA bapi_data TYPE mandt.
+    DATA bapi_datax TYPE mandt.
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                                                   parameter_name = 'BAPI_DATA' ).
+                                               parameter_name = 'BAPI_DATA' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = client
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = clientx ).
+            bapi_datax = bapi_datax ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 
   METHOD fail_wrong_datax_type.
-    DATA bapimereqheader TYPE bapimereqheader.
-    DATA clientx TYPE mandt.
+    DATA bapi_data TYPE bapimereqheader.
+    DATA bapi_datax TYPE mandt.
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                                                   parameter_name = 'BAPI_DATAX' ).
+                                               parameter_name = 'BAPI_DATAX' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = bapimereqheader
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = clientx ).
+            bapi_datax = bapi_datax ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 
   METHOD fail_data_deep_structure.
     DATA:
-      BEGIN OF data_deep_structure,
+      BEGIN OF bapi_data,
         BEGIN OF data_structure,
           client TYPE mandt,
         END OF data_structure,
-      END OF data_deep_structure.
+      END OF bapi_data.
     DATA:
-      BEGIN OF datax_structure,
+      BEGIN OF bapi_datax,
         client TYPE mandt,
-      END OF datax_structure.
+      END OF bapi_datax.
 
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+                                               parameter_name = 'BAPI_DATA' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = data_deep_structure
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = datax_structure ).
+            bapi_datax = bapi_datax ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 
   METHOD fail_datax_deep_structure.
     DATA:
-      BEGIN OF data_structure,
+      BEGIN OF bapi_data,
         client TYPE mandt,
-      END OF data_structure.
+      END OF bapi_data.
     DATA:
-      BEGIN OF datax_deep_structure,
+      BEGIN OF bapi_datax,
         BEGIN OF datax_structure,
           client TYPE mandt,
         END OF datax_structure,
-      END OF datax_deep_structure.
+      END OF bapi_datax.
 
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+                                               parameter_name = 'BAPI_DATA' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
-            bapi_data  = data_structure
+            bapi_data  = bapi_data
           CHANGING
-            bapi_datax = datax_deep_structure ).
+            bapi_datax = bapi_datax ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 
   METHOD fail_different_types.
@@ -239,7 +239,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
 
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+                                               parameter_name = 'BAPI_DATA' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -251,13 +251,13 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 
   METHOD fail_table_wrong_datax_type.
@@ -271,7 +271,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
 
     TRY.
         RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                                                   parameter_name = 'BAPI_DATA' ).
+                                               parameter_name = 'BAPI_DATA' ).
       CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
     ENDTRY.
     TRY.
@@ -283,12 +283,12 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       CATCH zcx_ca_fill_bapix INTO DATA(lx_stkoes_fill_bapix).
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
-            act                  = lx_stkoes_fill_bapix->textid
-            exp                  = lx_expected->textid ).
+            act = lx_stkoes_fill_bapix->textid
+            exp = lx_expected->textid ).
     ENDTRY.
     cl_abap_unit_assert=>assert_bound(
       EXPORTING
-        act              = lx_stkoes_fill_bapix
-        msg              = |Exception expected| ).
+        act = lx_stkoes_fill_bapix
+        msg = |Exception expected| ).
   ENDMETHOD.
 ENDCLASS.
