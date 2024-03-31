@@ -70,6 +70,9 @@ ENDCLASS.
 
 CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   METHOD fill_bapix.
+    IF bapi_data IS INITIAL.
+      RETURN.
+    ENDIF.
     CASE TYPE OF cl_abap_typedescr=>describe_by_data( bapi_data ).
       WHEN TYPE cl_abap_structdescr INTO DATA(bapi_data_structdescr).
         IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS NOT INSTANCE OF cl_abap_structdescr.
