@@ -50,8 +50,8 @@ CLASS zcx_ca_fill_bapix DEFINITION
       BEGIN OF different_types,
         msgid TYPE symsgid VALUE 'ZCX_CA_FILL_BAPIX',
         msgno TYPE symsgno VALUE '003',
-        attr1 TYPE scx_attrname VALUE 'MV_PARAMETER_01',
-        attr2 TYPE scx_attrname VALUE 'MV_PARAMETER_02',
+        attr1 TYPE scx_attrname VALUE 'PARAMETER_NAME_01',
+        attr2 TYPE scx_attrname VALUE 'PARAMETER_NAME_02',
         attr3 TYPE scx_attrname VALUE '',
         attr4 TYPE scx_attrname VALUE '',
       END OF different_types.
