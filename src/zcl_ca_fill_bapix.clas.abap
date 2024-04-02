@@ -97,7 +97,6 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
 
     DATA(parameter_kind) = _get_parameter_kind( bapi_data  = bapi_data
                                                 bapi_datax = bapi_datax ).
-
     CASE parameter_kind.
       WHEN cl_abap_typedescr=>kind_struct.
         _fill_bapix_structure(
@@ -205,7 +204,6 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
         IF NOT _is_flat( bapi_data_structdescr ).
           RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
                                                  parameter_name = 'BAPI_DATA' ).
-
         ENDIF.
         IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS NOT INSTANCE OF cl_abap_structdescr.
           RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>parameter_wrong_type
@@ -213,7 +211,6 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
         ELSEIF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr AND NOT _is_flat( CAST #( cl_abap_typedescr=>describe_by_data( bapi_datax ) ) ).
           RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
                                                  parameter_name = 'BAPI_DATAX' ).
-
         ENDIF.
       WHEN TYPE cl_abap_tabledescr INTO DATA(bapi_data_tabledescr).
         bapi_data_structdescr = COND #( WHEN bapi_data_tabledescr->get_table_line_type( ) IS INSTANCE OF cl_abap_structdescr
@@ -221,7 +218,6 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
         IF bapi_data_structdescr IS BOUND AND NOT _is_flat( bapi_data_structdescr ).
           RAISE EXCEPTION NEW zcx_ca_fill_bapix( textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
                                                  parameter_name = 'BAPI_DATA' ).
-
         ENDIF.
         CASE TYPE OF cl_abap_typedescr=>describe_by_data( bapi_datax ).
           WHEN TYPE cl_abap_structdescr INTO DATA(bapi_datax_structdescr).
