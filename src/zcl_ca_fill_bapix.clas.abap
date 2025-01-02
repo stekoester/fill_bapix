@@ -118,8 +118,8 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
     IF bapi_data IS INITIAL.
       RETURN.
     ENDIF.
-    IF cl_abap_structdescr=>describe_by_data( bapi_data )->is_ddic_type( ) AND
-       cl_abap_structdescr=>describe_by_data( bapi_datax )->is_ddic_type( ).
+    IF cl_abap_structdescr=>describe_by_data( bapi_data )->is_ddic_type( ) EQ abap_true AND
+       cl_abap_structdescr=>describe_by_data( bapi_datax )->is_ddic_type( ) EQ abap_true.
       _fill_bapix_structure_by_ddic(
         EXPORTING
           bapi_data  = bapi_data
@@ -157,8 +157,9 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
     DATA(bapi_datax_ddic_fields) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_datax ) )->get_ddic_field_list(
                                      p_including_substructres = abap_true ).
     LOOP AT bapi_datax_ddic_fields REFERENCE INTO DATA(datax_ddic_field).
-      DATA(data_ddic_field) = REF #( bapi_data_ddic_fields[ fieldname = datax_ddic_field->fieldname ] OPTIONAL ).
-      IF data_ddic_field IS NOT BOUND.
+      READ TABLE bapi_data_ddic_fields WITH KEY fieldname = datax_ddic_field->fieldname
+           REFERENCE INTO DATA(data_ddic_field).
+      IF sy-subrc EQ 4.
         CONTINUE.
       ENDIF.
       ASSIGN COMPONENT data_ddic_field->fieldname OF STRUCTURE bapi_data
@@ -180,8 +181,9 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
     DATA(bapi_datax_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_datax ) )->get_components( ).
 
     LOOP AT bapi_datax_components REFERENCE INTO DATA(bapi_datax_component).
-      DATA(bapi_data_component) = REF #( bapi_data_components[ name = bapi_datax_component->name ] OPTIONAL ).
-      IF bapi_data_component IS NOT BOUND.
+      READ TABLE bapi_data_components WITH KEY name = bapi_datax_component->name
+           REFERENCE INTO DATA(bapi_data_component).
+      IF sy-subrc EQ 4.
         CONTINUE.
       ENDIF.
       ASSIGN COMPONENT bapi_data_component->name OF STRUCTURE bapi_data
@@ -200,67 +202,60 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
 
   METHOD _get_parameter_kind.
     DATA(bapi_data_typedescr) = cl_abap_typedescr=>describe_by_data( bapi_data ).
-    CASE TYPE OF bapi_data_typedescr.
-      WHEN TYPE cl_abap_structdescr INTO DATA(bapi_data_structdescr).
-        IF NOT _is_flat( bapi_data_structdescr ).
+    DATA(bapi_datax_typedescr) = cl_abap_typedescr=>describe_by_data( bapi_datax ).
+    IF bapi_data_typedescr->kind NA |{ cl_abap_typedescr=>kind_struct }{ cl_abap_typedescr=>kind_table }|.
+      RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+        EXPORTING
+          textid         = zcx_ca_fill_bapix=>parameter_wrong_type
+          parameter_name = 'BAPI_DATA'.
+    ELSEIF bapi_datax_typedescr->kind NA |{ cl_abap_typedescr=>kind_struct }{ cl_abap_typedescr=>kind_table }|.
+      RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+        EXPORTING
+          textid         = zcx_ca_fill_bapix=>parameter_wrong_type
+          parameter_name = 'BAPI_DATAX'.
+    ELSEIF bapi_data_typedescr->kind NE bapi_datax_typedescr->kind.
+      RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+        EXPORTING
+          textid            = zcx_ca_fill_bapix=>different_types
+          parameter_name_01 = 'BAPI_DATA'
+          parameter_name_02 = 'BAPI_DATAX'.
+    ENDIF.
+
+    IF bapi_data_typedescr->kind EQ cl_abap_typedescr=>kind_struct.
+      DATA(bapi_data_structdescr) = CAST cl_abap_structdescr( bapi_data_typedescr ).
+      DATA(bapi_datax_structdescr) = CAST cl_abap_structdescr( bapi_datax_typedescr ).
+    ELSE.
+      DATA(bapi_data_tabledescr) = CAST cl_abap_tabledescr( bapi_data_typedescr ).
+      DATA(bapi_datax_tabledescr) = CAST cl_abap_tabledescr( bapi_datax_typedescr ).
+      TRY.
+          bapi_data_structdescr = CAST #( CAST cl_abap_tabledescr( bapi_data_typedescr )->get_table_line_type( ) ).
+        CATCH cx_sy_move_cast_error.
           RAISE EXCEPTION TYPE zcx_ca_fill_bapix
             EXPORTING
-              textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+              textid         = zcx_ca_fill_bapix=>parameter_wrong_type
               parameter_name = 'BAPI_DATA'.
-        ENDIF.
-        IF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS NOT INSTANCE OF cl_abap_structdescr.
+      ENDTRY.
+      TRY.
+          bapi_datax_structdescr = CAST #( CAST cl_abap_tabledescr( bapi_datax_typedescr )->get_table_line_type( ) ).
+        CATCH cx_sy_move_cast_error.
           RAISE EXCEPTION TYPE zcx_ca_fill_bapix
             EXPORTING
               textid         = zcx_ca_fill_bapix=>parameter_wrong_type
               parameter_name = 'BAPI_DATAX'.
-        ELSEIF cl_abap_typedescr=>describe_by_data( bapi_datax ) IS INSTANCE OF cl_abap_structdescr AND NOT _is_flat( CAST #( cl_abap_typedescr=>describe_by_data( bapi_datax ) ) ).
-          RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-            EXPORTING
-              textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-              parameter_name = 'BAPI_DATAX'.
-        ENDIF.
-      WHEN TYPE cl_abap_tabledescr INTO DATA(bapi_data_tabledescr).
-        bapi_data_structdescr = COND #( WHEN bapi_data_tabledescr->get_table_line_type( ) IS INSTANCE OF cl_abap_structdescr
-                                        THEN CAST #( bapi_data_tabledescr->get_table_line_type( ) ) ).
-        IF bapi_data_structdescr IS BOUND AND NOT _is_flat( bapi_data_structdescr ).
-          RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-            EXPORTING
-              textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-              parameter_name = 'BAPI_DATA'.
-        ENDIF.
-        CASE TYPE OF cl_abap_typedescr=>describe_by_data( bapi_datax ).
-          WHEN TYPE cl_abap_structdescr INTO DATA(bapi_datax_structdescr).
-            RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-              EXPORTING
-                textid            = zcx_ca_fill_bapix=>different_types
-                parameter_name_01 = 'BAPI_DATA'
-                parameter_name_02 = 'BAPI_DATAX'.
-          WHEN TYPE cl_abap_tabledescr INTO DATA(bapi_datax_tabledescr).
-            bapi_datax_structdescr = COND #( WHEN bapi_datax_tabledescr->get_table_line_type( ) IS INSTANCE OF cl_abap_structdescr
-                                             THEN CAST #( bapi_datax_tabledescr->get_table_line_type( ) ) ).
-            IF bapi_datax_structdescr IS NOT BOUND.
-              RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-                EXPORTING
-                  textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                  parameter_name = 'BAPI_DATAX'.
-            ELSEIF NOT _is_flat( bapi_datax_structdescr ).
-              RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-                EXPORTING
-                  textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
-                  parameter_name = 'BAPI_DATAX'.
-            ENDIF.
-          WHEN OTHERS.
-            RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-              EXPORTING
-                textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-                parameter_name = 'BAPI_DATAX'.
-        ENDCASE.
-      WHEN OTHERS.
-        RAISE EXCEPTION TYPE zcx_ca_fill_bapix
-          EXPORTING
-            textid         = zcx_ca_fill_bapix=>parameter_wrong_type
-            parameter_name = 'BAPI_DATA'.
-    ENDCASE.
+      ENDTRY.
+    ENDIF.
+    IF _is_flat( bapi_data_structdescr ) EQ abap_false.
+      RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+        EXPORTING
+          textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+          parameter_name = 'BAPI_DATA'.
+    ENDIF.
+    IF _is_flat( bapi_datax_structdescr ) EQ abap_false.
+      RAISE EXCEPTION TYPE zcx_ca_fill_bapix
+        EXPORTING
+          textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
+          parameter_name = 'BAPI_DATAX'.
+    ENDIF.
     parameter_kind = bapi_data_typedescr->kind.
   ENDMETHOD.
 
@@ -271,7 +266,7 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
       LOOP AT components REFERENCE INTO DATA(bapi_data_component).
         IF bapi_data_component->as_include EQ abap_true.
           is_flat = _is_flat( CAST #( bapi_data_component->type ) ).
-        ELSEIF bapi_data_component->type IS NOT INSTANCE OF cl_abap_elemdescr.
+        ELSEIF bapi_data_component->type->kind NE cl_abap_typedescr=>kind_elem.
           CLEAR is_flat.
         ENDIF.
         IF is_flat EQ abap_false.

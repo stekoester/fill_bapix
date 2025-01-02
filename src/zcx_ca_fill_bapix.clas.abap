@@ -6,7 +6,6 @@ CLASS zcx_ca_fill_bapix DEFINITION
 
   PUBLIC SECTION.
     INTERFACES if_t100_message.
-    INTERFACES if_t100_dyn_msg.
 
     CONSTANTS:
       "! <p class="shorttext synchronized">General error.</p>
