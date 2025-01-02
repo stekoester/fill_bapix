@@ -1,3 +1,4 @@
+*"* use this source file for your ABAP unit test classes
 CLASS ltcl_ca_fill_bapix DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
@@ -29,13 +30,16 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_data TYPE mandt.
     DATA bapi_datax TYPE mandt.
 
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
     bapi_data = sy-mandt.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>parameter_wrong_type
             parameter_name = 'BAPI_DATA'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -43,7 +47,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -62,16 +66,22 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_bapi_data.
     TYPES: ty_bapi_datax TYPE mandt.
 
+    DATA bapi_data_line TYPE ty_bapi_data.
+
     DATA bapi_data TYPE STANDARD TABLE OF ty_bapi_data.
     DATA bapi_datax TYPE STANDARD TABLE OF ty_bapi_datax.
 
-    bapi_data = VALUE #( ( client =  sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-client =  sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>parameter_wrong_type
             parameter_name = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -79,7 +89,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -98,16 +108,22 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         client TYPE mandt,
       END OF ty_bapi_datax.
 
+    DATA bapi_data_line TYPE ty_bapi_data.
+
     DATA bapi_data TYPE STANDARD TABLE OF ty_bapi_data.
     DATA bapi_datax TYPE STANDARD TABLE OF ty_bapi_datax.
 
-    bapi_data = VALUE #( ( sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line = sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>parameter_wrong_type
             parameter_name = 'BAPI_DATA'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -115,7 +131,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -137,13 +153,16 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_data TYPE ty_bapi_data.
     DATA bapi_datax TYPE ty_bapi_datax.
 
-    bapi_data = VALUE #( client =  sy-mandt ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data-client =  sy-mandt.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>parameter_wrong_type
             parameter_name = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -151,7 +170,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -169,16 +188,21 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         client TYPE mandt,
       END OF ty_data_structure.
 
+    DATA bapi_data_line TYPE ty_data_structure.
     DATA bapi_data TYPE STANDARD TABLE OF ty_data_structure.
     DATA bapi_datax TYPE mandt.
 
-    bapi_data = VALUE #( ( client =  sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-client = sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>parameter_wrong_type
             parameter_name = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -186,7 +210,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -210,16 +234,22 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         client TYPE mandt,
       END OF ty_bapi_datax.
 
+    DATA bapi_data_line TYPE ty_bapi_data.
+
     DATA bapi_data TYPE STANDARD TABLE OF ty_bapi_data.
     DATA bapi_datax TYPE STANDARD TABLE OF ty_bapi_datax.
 
-    bapi_data = VALUE #( ( bapi_data-client = sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-bapi_data-client = sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
             parameter_name = 'BAPI_DATA'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -227,7 +257,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -254,13 +284,16 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_data TYPE ty_bapi_data.
     DATA bapi_datax TYPE ty_bapi_datax.
 
-    bapi_data = VALUE #( bapi_data-client = sy-mandt ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data-bapi_data-client = sy-mandt.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
             parameter_name = 'BAPI_DATA'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -268,7 +301,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -295,13 +328,16 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
     DATA bapi_data TYPE ty_bapi_data.
     DATA bapi_datax TYPE ty_bapi_datax.
 
-    bapi_data = VALUE #( client = sy-mandt ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data-client = sy-mandt.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
             parameter_name = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -309,7 +345,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -333,16 +369,22 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         END OF datax_structure,
       END OF ty_bapi_datax.
 
+    DATA bapi_data_line TYPE ty_bapi_data.
     DATA bapi_data TYPE STANDARD TABLE OF ty_bapi_data.
+
     DATA bapi_datax TYPE STANDARD TABLE OF ty_bapi_datax.
 
-    bapi_data = VALUE #( ( client =  sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-client =  sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid         = zcx_ca_fill_bapix=>deep_structure_not_allowed
             parameter_name = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -350,7 +392,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -372,17 +414,23 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         client TYPE mandt,
       END OF ty_datax_structure.
 
+    DATA bapi_data_line TYPE ty_data_structure.
+
     DATA bapi_data TYPE STANDARD TABLE OF ty_data_structure.
     DATA bapi_datax TYPE ty_datax_structure.
 
-    bapi_data = VALUE #( ( client =  sy-mandt ) ).
+    DATA lx_expected TYPE REF TO zcx_ca_fill_bapix.
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-client =  sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
     TRY.
         RAISE EXCEPTION TYPE zcx_ca_fill_bapix
           EXPORTING
             textid            = zcx_ca_fill_bapix=>different_types
             parameter_name_01 = 'BAPI_DATA'
             parameter_name_02 = 'BAPI_DATAX'.
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_expected).
+      CATCH zcx_ca_fill_bapix INTO lx_expected ##NO_HANDLER.
     ENDTRY.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
@@ -390,7 +438,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
             bapi_data  = bapi_data
           CHANGING
             bapi_datax = bapi_datax ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
         cl_abap_unit_assert=>assert_equals(
           EXPORTING
             act = lx_ca_fill_bapix->get_text( )
@@ -405,12 +453,17 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
   METHOD s01_data_str_datax_str_fll_ddc.
     DATA bapi_data TYPE bapimereqheader.
     DATA bapi_datax TYPE bapimereqheaderx.
-    bapi_data = VALUE #( preq_no  = '0000000001'
-                         pr_type  = 'NB'
-                         ctrl_ind = 'T' ).
-    DATA(expected_result) = VALUE bapimereqheaderx( preq_no  = abap_true
-                                                    pr_type  = abap_true
-                                                    ctrl_ind = abap_true ).
+    DATA expected_result TYPE bapimereqheaderx.
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data-preq_no  = '0000000001'.
+    bapi_data-pr_type  = 'NB'.
+    bapi_data-ctrl_ind = 'T'.
+
+    expected_result-preq_no  = abap_true.
+    expected_result-pr_type  = abap_true.
+    expected_result-ctrl_ind = abap_true.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -421,7 +474,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
                                             exp                  = expected_result
                                             msg                  = |Expected result not received|
                                             ignore_hash_sequence = abap_true ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
@@ -441,9 +494,14 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         update        TYPE abap_bool,
       END OF ty_datax.
 
+    DATA expected_result TYPE ty_datax.
+    DATA bapi_data TYPE ty_data.
     DATA bapi_datax TYPE ty_datax.
-    DATA(bapi_data) = VALUE ty_data( client = sy-mandt ).
-    DATA(expected_result) = VALUE ty_datax( client = abap_true ).
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data-client = sy-mandt.
+    expected_result-client = abap_true.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -453,23 +511,32 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
   ENDMETHOD.
 
   METHOD s03_data_str_datax_str_fll_ddc.
-    DATA bapi_data  TYPE ty_bapimereqitemimp.
+    DATA expected_result_line TYPE bapimereqitemx.
+    DATA bapi_data_line TYPE bapimereqitemimp.
+
+    DATA expected_result TYPE ty_bapimereqitemx.
+    DATA bapi_data TYPE ty_bapimereqitemimp.
     DATA bapi_datax TYPE ty_bapimereqitemx.
-    bapi_data = VALUE #( ( preq_item = '00010'
-                           pur_group = '001'
-                           short_text = 'Material description'
-                           material = 'Material' ) ).
-    DATA(expected_result) = VALUE ty_bapimereqitemx( ( preq_item = '00010'
-                                                       pur_group = abap_true
-                                                       short_text = abap_true
-                                                       material = abap_true ) ).
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-preq_item = '00010'.
+    bapi_data_line-pur_group = '001'.
+    bapi_data_line-short_text = 'Material description'.
+    bapi_data_line-material = 'Material'.
+    APPEND bapi_data_line TO bapi_data.
+    expected_result_line-preq_item = '00010'.
+    expected_result_line-pur_group = abap_true.
+    expected_result_line-short_text = abap_true.
+    expected_result_line-material = abap_true.
+    APPEND expected_result_line TO expected_result.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -479,7 +546,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
@@ -501,9 +568,19 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_datax.
     TYPES tty_datax TYPE STANDARD TABLE OF ty_datax WITH DEFAULT KEY.
 
+    DATA bapi_data_line TYPE ty_data.
+    DATA expected_result_line TYPE ty_datax.
+
+    DATA expected_result TYPE tty_datax.
+    DATA bapi_data TYPE tty_data.
     DATA bapi_datax TYPE tty_datax.
-    DATA(bapi_data) = VALUE tty_data( ( client = sy-mandt ) ).
-    DATA(expected_result) = VALUE tty_datax( ( client = abap_true ) ).
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-client = sy-mandt.
+    APPEND bapi_data_line TO bapi_data.
+    expected_result_line-client = abap_true.
+    APPEND expected_result_line TO expected_result.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -513,7 +590,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
@@ -537,7 +614,10 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
 
     DATA bapi_data TYPE tty_data.
     DATA bapi_datax TYPE tty_datax.
-    DATA(expected_result) = VALUE tty_datax( ).
+    DATA expected_result TYPE tty_datax.
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -547,7 +627,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
@@ -569,9 +649,12 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_datax.
     TYPES tty_datax TYPE STANDARD TABLE OF ty_datax WITH DEFAULT KEY.
 
+    DATA expected_result TYPE tty_datax.
+    DATA bapi_data TYPE tty_data.
     DATA bapi_datax TYPE tty_datax.
-    DATA(bapi_data) = VALUE tty_data( ( ) ).
-    DATA(expected_result) = VALUE tty_datax( ( ) ).
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -581,7 +664,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
@@ -595,7 +678,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_data.
     TYPES:
       BEGIN OF ty_data_as_incl.
-        INCLUDE TYPE ty_data AS incl.
+            INCLUDE TYPE ty_data AS incl.
     TYPES:
       END OF ty_data_as_incl.
     TYPES tty_data_as_incl TYPE STANDARD TABLE OF ty_data_as_incl WITH DEFAULT KEY.
@@ -608,15 +691,24 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
       END OF ty_datax.
     TYPES:
       BEGIN OF ty_datax_as_incl.
-        INCLUDE TYPE ty_data AS incl.
+            INCLUDE TYPE ty_datax AS incl.
     TYPES:
       END OF ty_datax_as_incl.
     TYPES tty_datax_as_incl TYPE STANDARD TABLE OF ty_datax_as_incl WITH DEFAULT KEY.
 
+    DATA expected_result_line TYPE ty_datax_as_incl.
+    DATA bapi_data_line TYPE ty_data_as_incl.
+
+    DATA expected_result TYPE tty_datax_as_incl.
     DATA bapi_data TYPE tty_data_as_incl.
     DATA bapi_datax TYPE tty_datax_as_incl.
-    bapi_data = VALUE tty_datax_as_incl( ( source_client = '100' ) ).
-    DATA(expected_result) = VALUE tty_datax_as_incl( ( source_client = '100' ) ).
+
+    DATA lx_ca_fill_bapix TYPE REF TO zcx_ca_fill_bapix.
+
+    bapi_data_line-source_client = '100'.
+    APPEND bapi_data_line TO bapi_data.
+    expected_result_line-source_client = '100'.
+    APPEND expected_result_line TO expected_result.
     TRY.
         zcl_ca_fill_bapix=>fill_bapix(
           EXPORTING
@@ -626,7 +718,7 @@ CLASS ltcl_ca_fill_bapix IMPLEMENTATION.
         cl_abap_unit_assert=>assert_equals( act = bapi_datax
                                             exp = expected_result
                                             msg = |Expected result not received| ).
-      CATCH zcx_ca_fill_bapix INTO DATA(lx_ca_fill_bapix).
+      CATCH zcx_ca_fill_bapix INTO lx_ca_fill_bapix ##NO_HANDLER.
     ENDTRY.
     cl_abap_unit_assert=>assert_not_bound( act = lx_ca_fill_bapix
                                            msg = |Exception instance shouldn't be bound| ).
