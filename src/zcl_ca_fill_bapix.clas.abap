@@ -81,11 +81,25 @@ CLASS zcl_ca_fill_bapix DEFINITION
       RAISING
         zcx_ca_fill_bapix.
 
+    "! <p class="shorttext synchronized">Is structure flat</p>
+    "!
+    "! @parameter abap_structdescr | <p class="shorttext synchronized">Structure description</p>
+    "! @parameter is_flat          | <p class="shorttext synchronized">Structure is flat</p>
     CLASS-METHODS _is_flat
       IMPORTING
         abap_structdescr TYPE REF TO cl_abap_structdescr
       RETURNING
         VALUE(is_flat)   TYPE abap_bool.
+
+    "! <p class="shorttext synchronized">Get components of type description</p>
+    "!
+    "! @parameter abap_typedescr | <p class="shorttext synchronized">Type description</p>
+    "! @parameter components     | <p class="shorttext synchronized">Components</p>
+    CLASS-METHODS _get_components
+      IMPORTING
+        abap_typedescr    TYPE REF TO cl_abap_typedescr
+      RETURNING
+        VALUE(components) TYPE abap_component_tab.
 ENDCLASS.
 
 
@@ -174,8 +188,8 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD _fill_bapix_structure_by_comp.
-    DATA(bapi_data_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_data ) )->get_components( ).
-    DATA(bapi_datax_components) = CAST cl_abap_structdescr( cl_abap_structdescr=>describe_by_data( bapi_datax ) )->get_components( ).
+    DATA(bapi_data_components) = _get_components( cl_abap_typedescr=>describe_by_data( bapi_data ) ).
+    DATA(bapi_datax_components) = _get_components( cl_abap_typedescr=>describe_by_data( bapi_datax ) ).
 
     LOOP AT bapi_datax_components REFERENCE INTO DATA(bapi_datax_component).
       DATA(bapi_data_component) = REF #( bapi_data_components[ name = bapi_datax_component->name ] OPTIONAL ).
@@ -270,5 +284,22 @@ CLASS zcl_ca_fill_bapix IMPLEMENTATION.
         ENDIF.
       ENDLOOP.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD _get_components.
+    IF abap_typedescr->kind NE cl_abap_typedescr=>kind_struct.
+      RETURN.
+    ENDIF.
+
+    components = CAST cl_abap_structdescr( abap_typedescr )->get_components( ).
+
+    LOOP AT components REFERENCE INTO DATA(component)
+         WHERE as_include EQ abap_true.
+      DATA(insert_position) = sy-tabix.
+      INSERT LINES OF _get_components( component->type )
+             INTO components
+             INDEX insert_position.
+    ENDLOOP.
+    DELETE components WHERE as_include EQ abap_true.
   ENDMETHOD.
 ENDCLASS.

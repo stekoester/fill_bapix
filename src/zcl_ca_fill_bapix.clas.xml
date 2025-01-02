@@ -39,9 +39,19 @@
      <DESCRIPT>Fill BAPIX data table dependent on BAPI data table</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>_GET_COMPONENTS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get components of type description</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>_GET_PARAMETER_KIND</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Get kind of parameter</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>_IS_FLAT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Is structure flat</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
    <DESCRIPTIONS_SUB>
@@ -130,6 +140,18 @@
      <DESCRIPT>Exceptions for zcx_ca_fill_bapix</DESCRIPT>
     </SEOSUBCOTX>
     <SEOSUBCOTX>
+     <CMPNAME>_GET_COMPONENTS</CMPNAME>
+     <SCONAME>ABAP_TYPEDESCR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Type description</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>_GET_COMPONENTS</CMPNAME>
+     <SCONAME>COMPONENTS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Components</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
      <CMPNAME>_GET_PARAMETER_KIND</CMPNAME>
      <SCONAME>BAPI_DATA</SCONAME>
      <LANGU>E</LANGU>
@@ -152,6 +174,18 @@
      <SCONAME>ZCX_CA_FILL_BAPIX</SCONAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Exceptions for zcx_ca_fill_bapix</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>_IS_FLAT</CMPNAME>
+     <SCONAME>ABAP_STRUCTDESCR</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Structure description</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>_IS_FLAT</CMPNAME>
+     <SCONAME>IS_FLAT</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Structure is flat</DESCRIPT>
     </SEOSUBCOTX>
    </DESCRIPTIONS_SUB>
   </asx:values>
